@@ -1,2 +1,5 @@
-{"title":"Testing Changed","content":"content #2","_id":"6kWc4Ww0wdf0DKWu"}
-{"$$deleted":true,"_id":"6kWc4Ww0wdf0DKWu"}
+{"postId":"6kWc4Ww0wdf0DKWu","comment":"New comment","_id":"VhKM1oAz7T2k9Cgz"}
+{"postId":"6kWc4Ww0asdfsdWu","comment":"New comment 2","_id":"irdP23AKi1AiMUb4"}
+{"title":"New title","content":"content 3","_id":"rDTOMi8gRNgXdWYh"}
+{"title":"New title 4","content":"content 4","_id":"rOjcSFlyJde8ArX9"}
+{"postId":"rDTOMi8gRNgXdWYh","comment":"Comment for post id rDTOMi8gRNgXdWYh","_id":"cDHNbxM36IsyjTLi"}

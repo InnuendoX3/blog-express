@@ -41,4 +41,21 @@ app.delete('/delete/:id', (req, res) => {
   }); 
 })
 
+app.post('/createComment/:id', (req, res) => {
+  const comment = {
+    postId: req.params.id,
+    comment: req.body.comment 
+  }
+  db.find({_id: req.params.id}, (err, docs) => {
+    if(docs.length === 0) {
+      res.send('Post not found').status(400)
+    } else {
+      db.insert(comment, function(err) {
+        res.send('Done').status(200);
+      })
+      
+    }
+  })
+})
+
 app.listen(3000, () => { console.log('App listening on port 3000')})
