@@ -6,9 +6,10 @@ function savePost(post) {
   return new Promise(async (resolve, reject) => {
     db.insert(post, (err, newDoc) => {
       if(err) {
-        reject(err)
+        console.log(err);
+        reject(err);
       }
-      resolve(newDoc)
+      resolve(newDoc);
     })
   })
     
@@ -18,9 +19,10 @@ function deletePost(id) {
   return new Promise(async (resolve, reject) => {
     db.remove({ _id: id }, {}, (err, numRemoved) => {
       if(err) {
-        reject(err)
+        console.log(err);
+        reject(err);
       }
-      resolve(numRemoved)
+      resolve(numRemoved);
     });
   })
 }
@@ -47,4 +49,4 @@ function saveComment(comment) {
   })
 }
 
-module.exports = { savePost, deletePost, updatePost };
+module.exports = { savePost, deletePost, updatePost, saveComment };

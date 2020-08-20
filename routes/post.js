@@ -1,28 +1,35 @@
 const express = require('express');
 const router = express.Router();
-const { create, remove, update, createComment } = require('../controllers/post');
+const postController = require('../controllers/post');
 
-router.post('/', async (req, res) => {
-  const data = await create(req.body)
+router.post('/', postController.create);
+router.delete('/:postId', postController.remove);
+router.put('/:postId', postController.update);
+router.post('/:postId/addcomment', postController.createComment);
+
+////
+
+/* router.post('/', async (req, res) => {
+  const data = await postController.create(req.body)
   res.send(data).status(201)
-})
+}) 
 
-
-router.delete('/:id', async (req, res) => {
-  const numDeleted = await remove(req.params.id)
+router.delete('/:postId', async (req, res) => {
+  const numDeleted = await remove(req.params.postId)
   const message = `${numDeleted} document(s) deleted`
   res.send(message).status(201)
 })
 
-router.put('/:id', async (req, res) => {
-  const numUpdated = await update(req.params.id, req.body.title, req.body.content);
+
+router.put('/:postId', async (req, res) => {
+  const numUpdated = await update(req.params.postId, req.body.title, req.body.content);
   const message = `${numUpdated} document(s) updated`
   res.send(message).status(200)
-})
+}) 
 
-router.post('/addcomment/:postId', (req, res) => {
-  createComment(req.params.postId, req.body.comment)
-  res.send('Commented created!').status(201)
-})
+router.post('/:postId/addcomment', async (req, res) => {
+  const data = await createComment(req.params.postId, req.body.comment)
+  res.send(data).status(201)
+}) */
 
 module.exports = router;
