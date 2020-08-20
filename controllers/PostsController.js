@@ -1,8 +1,8 @@
-const { savePost, deletePost, updatePost } = require('../models/Post');
+const { savePost, deletePost, updatePost, saveComment } = require('../models/Post');
 
 async function create(post) {
-  const data = await savePost(post);
-  return data;
+  const info = await savePost(post);
+  return info;
 } 
 
 async function remove(id) {
@@ -15,5 +15,14 @@ async function update(id, title, content) {
   return numUpdated;
 }
 
-module.exports = { create, remove, update };
+async function createComment(postId, comment) {
+  const commentToSave = {
+    postId,
+    comment,
+  };
+  const info = await saveComment(commentToSave); 
+  return info;
+}
+
+module.exports = { create, remove, update, createComment };
 

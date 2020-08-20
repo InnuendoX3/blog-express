@@ -20,8 +20,8 @@ router.put('/update/:id', async (req, res) => {
   res.send(message).status(200)
 })
 
-router.post('/addcomment/:blogId', (req, res) => {
-  createComment(req.params.blogId, req.body.comment)
+router.post('/addcomment/:postId', (req, res) => {
+  createComment(req.params.postId, req.body.comment)
   res.send('Commented created!').status(201)
 })
 

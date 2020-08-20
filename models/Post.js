@@ -36,4 +36,15 @@ function updatePost(id, title, content) {
   })
 }
 
+function saveComment(comment) {
+  return new Promise(async (resolve, reject) => {
+    db.insert(comment, (err, newComment) => {
+      if(err) {
+        reject(err)
+      }
+      resolve(newComment)
+    })
+  })
+}
+
 module.exports = { savePost, deletePost, updatePost };
