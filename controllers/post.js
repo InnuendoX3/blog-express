@@ -1,4 +1,4 @@
-const { savePost, deletePost, updatePost, saveComment } = require('../models/Post');
+const { savePost, deletePost, updatePost, saveComment } = require('../models/post');
 
 async function create(post) {
   const info = await savePost(post);
