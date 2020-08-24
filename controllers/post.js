@@ -1,4 +1,17 @@
-const { savePost, deletePost, updatePost, saveComment } = require('../models/post');
+const { findPosts, findPost, savePost, deletePost, updatePost, saveComment } = require('../models/post');
+
+// Get all posts
+async function getAllPosts(req, res) {
+  const posts = await findPosts();
+  res.send(posts).status(201);
+}
+
+// Get a post
+async function getPost(req, res) {
+  const postId = req.params.postId;
+  const post = await findPost(postId);
+  res.send(post).status(201);
+}
 
 // Create new post
 async function create(req, res) {
@@ -35,5 +48,5 @@ async function createComment(req, res) {
   res.send(info).status(201);
 }
 
-module.exports = { create, remove, update, createComment };
+module.exports = { getAllPosts, getPost, create, remove, update, createComment };
 

@@ -4,7 +4,8 @@ const postRoutes = require('./routes/post');
 
 
 app.use(express.json());
-app.use('/post', postRoutes);
+app.use('/posts', postRoutes);
+app.use('/comments', postRoutes);
 
 
 app.listen(3000, () => { console.log('App listening on port 3000')})
