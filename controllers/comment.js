@@ -1,4 +1,4 @@
-const { saveComment } = require('../models/comment');
+const { findComments, findComment, saveComment, deleteComment, updateComment } = require('../models/comment');
 
 // Get all comments
 async function getAll(req, res) {
@@ -31,9 +31,9 @@ async function remove(req, res) {
 // Update a comment
 async function update(req, res) {
   const commentId = req.params.commentId;
-  const text = req.params.text;
-  const postId = req.params.postId;
-  const userId = req.params.userId;
+  const text = req.body.text;
+  const postId = req.body.postId;
+  const userId = req.body.userId;
   const numUpdated = await updateComment(commentId, text, postId, userId);
   const message = `${numUpdated} comment(s) updated`;
   res.send({message}).status(200);

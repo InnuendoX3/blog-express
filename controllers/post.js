@@ -48,5 +48,12 @@ async function createComment(req, res) {
   res.send(info).status(201);
 }
 
-module.exports = { getAll, getOne, create, remove, update, createComment };
+module.exports = { 
+  getAll, 
+  getOne, 
+  create, 
+  remove, 
+  update, 
+  createComment 
+};
 

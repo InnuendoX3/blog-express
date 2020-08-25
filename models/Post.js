@@ -2,9 +2,9 @@ const Datastore = require('nedb');
 const db = new Datastore({ filename: './store-posts.db' });
 db.loadDatabase(function (err) {});
 
-function findPosts(filter = {}) {
+function findPosts() {
   return new Promise( async (resolve, reject) => {
-    db.find(filter, (err, docs) => {
+    db.find({}, (err, docs) => {
       if(err) {
         console.log(err);
         reject(err);
@@ -53,7 +53,7 @@ function deletePost(id) {
 
 function updatePost(id, title, content) {
   return new Promise(async (resolve, reject) => {
-    db.update({ _id : id }, { title : title, content : content }, {}, (err, numReplaced) => {
+    db.update({ _id : id }, { title, content }, {}, (err, numReplaced) => {
       if(err) {
         reject(err)
       }
@@ -62,6 +62,7 @@ function updatePost(id, title, content) {
   })
 }
 
+// Delete?
 function saveComment(comment) {
   return new Promise(async (resolve, reject) => {
     db.insert(comment, (err, newComment) => {
