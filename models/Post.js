@@ -1,5 +1,5 @@
 const Datastore = require('nedb');
-const db = new Datastore({ filename: './posts.db' });
+const db = new Datastore({ filename: './store-posts.db' });
 db.loadDatabase(function (err) {});
 
 function findPosts(filter = {}) {
