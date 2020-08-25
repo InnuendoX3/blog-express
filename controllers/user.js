@@ -1,4 +1,6 @@
 const { findUsers, findUser, saveUser, deleteUser, updateUser } = require('../models/user');
+const { findComments } = require('../models/comment');
+const { findPosts } = require('../models/post');
 
 // Get all users
 async function getAll(req, res) {
@@ -42,6 +44,21 @@ async function update(req, res) {
   res.send(message).status(200);
 }
 
+// Relationships
+async function getUserPosts(req, res) {
+  const userId = req.params.userId;
+  const filter = { userId };
+  const posts = await findPosts(filter);
+  res.send(posts).status(200);
+}
+
+async function getUserComments(req, res) {
+  const userId = req.params.userId;
+  const filter = { userId };
+  const comments = await findComments(filter);
+  res.send(comments).status(200);
+}
+
 
 module.exports = { 
   getAll,
@@ -49,4 +66,6 @@ module.exports = {
   create,
   remove,
   update,
+  getUserPosts,
+  getUserComments
 };

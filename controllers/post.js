@@ -1,4 +1,5 @@
-const { findPosts, findPost, savePost, deletePost, updatePost, saveComment } = require('../models/post');
+const { findPosts, findPost, savePost, deletePost, updatePost } = require('../models/post');
+const { findComments } = require('../models/comment');
 
 // Get all posts
 async function getAll(req, res) {
@@ -42,14 +43,12 @@ async function update(req, res) {
   res.send(message).status(200);
 }
 
-// Create a comment for a post, by its post Id
-async function createComment(req, res) {
-  const commentToSave = {
-    postId: req.params.postId,
-    comment: req.body.comment
-  };
-  const info = await saveComment(commentToSave); 
-  res.send(info).status(201);
+// Relationships
+async function getPostComments(req, res) {
+  const postId = req.params.postId;
+  const filter = { postId };
+  const comments = await findComments(filter);
+  res.send(comments).status(200);
 }
 
 module.exports = { 
@@ -57,7 +56,7 @@ module.exports = {
   getOne, 
   create, 
   remove, 
-  update, 
-  createComment 
+  update,
+  getPostComments
 };
 

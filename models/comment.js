@@ -3,9 +3,9 @@ const comment = require('../controllers/comment');
 const db = new Datastore({ filename: './store-comments.db'});
 db.loadDatabase(function (err) {});
 
-function findComments() {
+function findComments(filter = {}) {
   return new Promise( async (resolve, reject) => {
-    db.find({}, (err, docs) => {
+    db.find(filter, (err, docs) => {
       if(err) {
         console.log(err);
         reject(err);

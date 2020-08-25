@@ -8,7 +8,7 @@ router.post('/', postController.create);
 router.delete('/:postId', postController.remove);
 router.patch('/:postId', postController.update);
 
-// Dejarlo?
-router.post('/:postId/addcomment', postController.createComment);
+// TODO: Endpoints with relationships
+router.get('/:postId/comments', postController.getPostComments);
 
 module.exports = router;

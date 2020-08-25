@@ -8,4 +8,8 @@ router.post('/', userController.create);
 router.delete('/:userId', userController.remove);
 router.patch('/:userId', userController.update);
 
+// Routes with relationships
+router.get('/:userId/posts', userController.getUserPosts);
+router.get('/:userId/comments', userController.getUserComments);
+
 module.exports = router;
