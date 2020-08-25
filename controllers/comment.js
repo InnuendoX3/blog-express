@@ -10,7 +10,11 @@ async function getAll(req, res) {
 async function getOne(req, res) {
   const commentId = req.params.commentId;
   const comment = await findComment(commentId);
-  res.send(comment).status(200);
+  if (comment === null) {
+    res.send({message: 'Comment not found'}).status(400);
+  } else {
+    res.send(comment).status(200);
+  }
 }
 
 // Create a comment

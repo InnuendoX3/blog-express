@@ -10,7 +10,11 @@ async function getAll(req, res) {
 async function getOne(req, res) {
   const postId = req.params.postId;
   const post = await findPost(postId);
-  res.send(post).status(200);
+  if (post === null) {
+    res.send({message: 'Post not found'}).status(400);
+  } else {
+    res.send(post).status(200);
+  }
 }
 
 // Create new post
