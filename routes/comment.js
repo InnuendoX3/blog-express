@@ -1,13 +1,21 @@
 const express = require('express');
 const router = express.Router();
 const commentController = require('../controllers/comment');
-const userController = require('../controllers/user');
+const authorizationController = require('../controllers/authorization');
 
 
-router.get('/', userController.authorize, commentController.getAll);
-router.get('/:commentId', userController.authorize, commentController.getOne)
-router.post('/', userController.authorize, commentController.create);
-router.delete('/:commentId', userController.authorize, commentController.remove);
-router.patch('/:commentId', userController.authorize, commentController.update);
+// Admin routes
+router.get('/', authorizationController.authorize, commentController.getAll);
+
+// Admin and user routes
+router.get('/:commentId', authorizationController.authorize, commentController.getOne)
+router.post('/', authorizationController.authorize, commentController.create);
+router.delete('/:commentId', authorizationController.authorize, commentController.remove);
+router.patch('/:commentId', authorizationController.authorize, commentController.update);
+
+// User routes
+
+// Anonymous routes
+
 
 module.exports = router;

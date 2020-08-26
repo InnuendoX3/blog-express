@@ -15,7 +15,7 @@ function findUsers() {
   })
 }
 
-function findUser(userId) {
+function adminFindUser(userId) {
   return new Promise( async (resolve, reject) => {
     db.findOne({_id: userId}, (err, doc) => {
       if(err) {
@@ -27,13 +27,31 @@ function findUser(userId) {
   })
 }
 
+function userFindUser(userId) {
+  return new Promise( async (resolve, reject) => {
+    db.findOne({_id: userId}, (err, doc) => {
+      if(err) {
+        console.log(err);
+        reject(err);
+      } else {
+        if(doc._id == userId) {
+          resolve(doc)
+        } else {
+          reject("You can only view your own profile")
+        }
+      }
+    })
+  })
+}
+
 function saveUser(user) {
   return new Promise(async (resolve, reject) => {
     const salt = bcryptjs.genSaltSync(10);
     const hash = bcryptjs.hashSync(user.password, salt);
     let hashedUser = {
       username: user.username,
-      password: hash
+      password: hash,
+      role: user.role
     };
     db.insert(hashedUser, (err, newDoc) => {
       if(err) {
@@ -57,9 +75,9 @@ function deleteUser(id) {
   })
 }
 
-function updateUser(id, username, password) {
+function updateUser(id, username, password, role) {
   return new Promise(async (resolve, reject) => {
-    db.update({ _id : id }, { username, password }, {}, (err, numReplaced) => {
+    db.update({ _id : id }, { username, password, role }, {}, (err, numReplaced) => {
       if(err) {
         reject(err)
       }
@@ -89,7 +107,8 @@ function loginUser(user) {
 
 module.exports = { 
   findUsers,
-  findUser,
+  adminFindUser,
+  userFindUser,
   saveUser,
   deleteUser,
   updateUser,

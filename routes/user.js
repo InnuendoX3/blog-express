@@ -1,19 +1,27 @@
 const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/user');
+const authorizationController = require('../controllers/authorization');
 
-router.get('/', userController.authorize, userController.getAll);
-router.post('/login', userController.authorize, userController.login)
-router.get('/authorize', userController.authorize, userController.checkIfUserIsAuthorized);
+// Admin routes
+router.get('/', authorizationController.authorize, userController.getAll);
 
-router.get('/:userId', userController.authorize, userController.getOne);
-router.post('/', userController.authorize, userController.create);
-router.delete('/:userId', userController.authorize, userController.remove);
-router.patch('/:userId', userController.authorize, userController.update);
+// User routes
 
-
+// Admin and user routes
+router.get('/:userId', authorizationController.authorize, userController.getOne);
+router.delete('/:userId', authorizationController.authorize, userController.remove);
+router.patch('/:userId', authorizationController.authorize, userController.update);
 // Routes with relationships
-router.get('/:userId/posts', userController.authorize, userController.getUserPosts);
-router.get('/:userId/comments', userController.authorize, userController.getUserComments);
+router.get('/:userId/posts', authorizationController.authorize, userController.getUserPosts);
+router.get('/:userId/comments', authorizationController.authorize, userController.getUserComments);
+
+// Anonymous routes
+router.post('/login', authorizationController.login)
+router.post('/', userController.create);
+
+
+
+
 
 module.exports = router;
