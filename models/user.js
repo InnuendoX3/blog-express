@@ -1,4 +1,5 @@
 const Datastore = require('nedb');
+const bcryptjs = require('bcryptjs');
 const db = new Datastore({ filename: './store-users.db'});
 db.loadDatabase(function (err) {});
 
@@ -28,7 +29,13 @@ function findUser(userId) {
 
 function saveUser(user) {
   return new Promise(async (resolve, reject) => {
-    db.insert(user, (err, newDoc) => {
+    const salt = bcryptjs.genSaltSync(10);
+    const hash = bcryptjs.hashSync(user.password, salt);
+    let hashedUser = {
+      username: user.username,
+      password: hash
+    };
+    db.insert(hashedUser, (err, newDoc) => {
       if(err) {
         console.log(err);
         reject(err);
