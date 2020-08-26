@@ -43,7 +43,6 @@ function saveUser(user) {
       resolve(newDoc);
     })
   })
-    
 }
 
 function deleteUser(id) {
@@ -69,11 +68,30 @@ function updateUser(id, username, password) {
   })
 }
 
+function loginUser(user) {
+  return new Promise(async (resolve, reject) => {
+    db.findOne({username: user.username}, (err, doc) => {
+      if(err) {
+        console.log(err);
+        reject(err);
+      } else {
+        const response = bcryptjs.compareSync(user.password, doc.password) 
+        if (response) {
+          resolve(doc)
+        }else {
+          reject(response)
+        }
+      }
+    })
+  })
+}
+
 
 module.exports = { 
   findUsers,
   findUser,
   saveUser,
   deleteUser,
-  updateUser
+  updateUser,
+  loginUser
 };

@@ -1,6 +1,37 @@
-const { findUsers, findUser, saveUser, deleteUser, updateUser } = require('../models/user');
+const { findUsers, findUser, saveUser, deleteUser, updateUser, loginUser } = require('../models/user');
 const { findComments } = require('../models/comment');
 const { findPosts } = require('../models/post');
+const jwt = require('jsonwebtoken');
+const secret = "random string";
+
+async function authorize(req, res, next) {
+  if(!req.headers.authorization) return res.sendStatus(403)
+  const token = req.headers.authorization.replace("Bearer ", "");
+  try {
+      await jwt.verify(token, secret);
+      next();
+  } catch (error) {
+      res.sendStatus(403);
+  }
+}
+
+async function checkIfUserIsAuthorized(req, res) {
+  res.send("authorized");
+}
+
+async function login(req, res) {
+  try{
+  const user = {
+    username: req.body.username,
+    password: req.body.password
+  }
+  const login = await loginUser(user);
+  const token = jwt.sign({username: login.username}, secret, {expiresIn: "1h"})
+  res.json({token});
+  }catch(err) {
+    res.sendStatus(401).send("Wrong username or password");
+  }
+}
 
 // Get all users
 async function getAll(req, res) {
@@ -67,5 +98,8 @@ module.exports = {
   remove,
   update,
   getUserPosts,
-  getUserComments
+  getUserComments,
+  login,
+  authorize,
+  checkIfUserIsAuthorized
 };
