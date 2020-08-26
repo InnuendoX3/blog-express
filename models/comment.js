@@ -1,5 +1,4 @@
 const Datastore = require('nedb');
-const comment = require('../controllers/comment');
 const db = new Datastore({ filename: './store-comments.db'});
 db.loadDatabase(function (err) {});
 
@@ -14,6 +13,7 @@ function findComments(filter = {}) {
     })
   })
 }
+
 
 function findComment(commentId) {
   return new Promise( async (resolve, reject) => {

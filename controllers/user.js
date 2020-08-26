@@ -16,7 +16,7 @@ async function authorize(req, res, next) {
 }
 
 async function checkIfUserIsAuthorized(req, res) {
-  res.send("authorized");
+  res.send("Authorized token");
 }
 
 async function login(req, res) {
