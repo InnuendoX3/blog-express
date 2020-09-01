@@ -3,7 +3,11 @@ const { findComments } = require('../models/comment');
 
 // Get all posts
 async function getAll(req, res) {
-  const posts = await findPosts();
+  let queryFilter = {}  // Admin {}
+  if(req.user.role === 'User') {
+    queryFilter = {ownerId: req.user.userId}
+  }
+  const posts = await findPosts(queryFilter);
   res.send(posts).status(200);
 }
 

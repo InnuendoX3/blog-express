@@ -11,7 +11,7 @@ db.loadDatabase(function (err) {});
  * }
 */
 
-function findPosts(filter = {}) {
+function findPosts(filter) {
   return new Promise( async (resolve, reject) => {
     db.find(filter, (err, docs) => {
       if(err) {
