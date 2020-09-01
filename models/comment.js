@@ -2,6 +2,15 @@ const Datastore = require('nedb');
 const db = new Datastore({ filename: './store-comments.db'});
 db.loadDatabase(function (err) {});
 
+/**
+ * {
+ *    text:     String
+ *    postId:   String
+ *    ownerId:  String
+ *    _id:      String by NeDB
+ * }
+*/
+
 function findComments(filter = {}) {
   return new Promise( async (resolve, reject) => {
     db.find(filter, (err, docs) => {
@@ -51,9 +60,9 @@ function deleteComment(id) {
   })
 }
 
-function updateComment(id, text, postId, userId) {
+function updateComment(id, text, postId, ownerId) {
   return new Promise(async (resolve, reject) => {
-    db.update({ _id : id }, {text, postId, userId}, {}, (err, numReplaced) => {
+    db.update({ _id : id }, {text, postId, ownerId}, {}, (err, numReplaced) => {
       if(err) {
         reject(err)
       }

@@ -87,7 +87,12 @@ async function login(req, res) {
       password: req.body.password
     }
     const login = await loginUser(user);
-    const token = jwt.sign({username: login.username, role: login.role}, secret, {expiresIn: "1h"})
+    const toEncrypt = {
+      username: login.username,
+      userId: login._id,
+      role: login.role}
+    console.log(toEncrypt)
+    const token = jwt.sign(toEncrypt, secret, {expiresIn: "1h"})
     res.json({token});
   }catch(err) {
     res.sendStatus(401)

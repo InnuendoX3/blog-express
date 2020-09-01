@@ -37,8 +37,8 @@ async function update(req, res) {
   const commentId = req.params.commentId;
   const text = req.body.text;
   const postId = req.body.postId;
-  const userId = req.body.userId;
-  const numUpdated = await updateComment(commentId, text, postId, userId);
+  const ownerId = req.body.ownerId;
+  const numUpdated = await updateComment(commentId, text, postId, ownerId);
   const message = `${numUpdated} comment(s) updated`;
   res.send({message}).status(200);
 }

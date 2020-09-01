@@ -1,23 +1,20 @@
 const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/user');
-const { authorizeAdmin, authorizeUser } = require('../middlewares/authorization')
+const { authorizeAdmin } = require('../middlewares/authorization')
 
-
-// Admin routes
+// Authorization for Admin
 router.get('/', authorizeAdmin, userController.getAll);
+router.get('/:userId', authorizeAdmin, userController.getOne);
+router.delete('/:userId', authorizeAdmin, userController.remove);
+router.patch('/:userId', authorizeAdmin, userController.update);
 
-// Admin and user routes
-router.get('/:userId', authorizeUser, userController.getOne);
-router.delete('/:userId', authorizeUser, userController.remove);
-router.patch('/:userId', authorizeUser, userController.update);
-// Routes with relationships
-router.get('/:userId/posts', authorizeUser, userController.getUserPosts);
-router.get('/:userId/comments', authorizeUser, userController.getUserComments);
-
-// Anonymous routes
+// Authorization for anonymous
 router.post('/login', userController.login)
 router.post('/', userController.create);
 
+// ? Routes needed ?
+router.get('/:userId/posts', authorizeAdmin, userController.getUserPosts);
+router.get('/:userId/comments', authorizeAdmin, userController.getUserComments);
 
 module.exports = router;

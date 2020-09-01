@@ -23,7 +23,7 @@ async function authorizeUser(req, res, next) {
   const token = req.headers.authorization.replace('Bearer ', '')
 
   try {
-    const payload = jwt.verify(token)
+    const payload = jwt.verify(token, secret)
     req.user = payload
     next()
   } catch (error) {

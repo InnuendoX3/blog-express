@@ -2,6 +2,15 @@ const Datastore = require('nedb');
 const db = new Datastore({ filename: './store-posts.db' });
 db.loadDatabase(function (err) {});
 
+/**
+ * {
+ *    title:    String
+ *    content:  String
+ *    ownerId:  String
+ *    _id:      String by NeDB
+ * }
+*/
+
 function findPosts(filter = {}) {
   return new Promise( async (resolve, reject) => {
     db.find(filter, (err, docs) => {

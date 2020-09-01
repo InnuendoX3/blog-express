@@ -20,7 +20,11 @@ async function getOne(req, res) {
 
 // Create new post
 async function create(req, res) {
-  const post = req.body;
+  const post = {
+    title: req.body.title,
+    content: req.body.content,
+    ownerId: req.user.userId
+  }
   const info = await savePost(post);
   res.send(info).status(201);
 } 

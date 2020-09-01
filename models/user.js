@@ -3,6 +3,15 @@ const bcryptjs = require('bcryptjs');
 const db = new Datastore({ filename: './store-users.db'});
 db.loadDatabase(function (err) {});
 
+/**
+ * {
+ *    username: String
+ *    password: String
+ *    role:     String (Admin, User)
+ *    _id:      String by NeDB
+ * }
+*/
+
 function findUsers() {
   return new Promise( async (resolve, reject) => {
     db.find({}, (err, docs) => {
