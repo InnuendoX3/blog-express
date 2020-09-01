@@ -1,6 +1,8 @@
-const { findUsers, adminFindUser, userFindUser, saveUser, deleteUser, updateUser } = require('../models/user');
+const { findUsers, adminFindUser, userFindUser, saveUser, deleteUser, updateUser, loginUser } = require('../models/user');
 const { findComments } = require('../models/comment');
 const { findPosts } = require('../models/post');
+const jwt = require('jsonwebtoken');
+const secret = "random string";
 
 // Get all users
 async function getAll(req, res) {
@@ -78,6 +80,21 @@ async function getUserComments(req, res) {
 }
 
 
+async function login(req, res) {
+  try{
+    const user = {
+      username: req.body.username,
+      password: req.body.password
+    }
+    const login = await loginUser(user);
+    const token = jwt.sign({username: login.username, role: login.role}, secret, {expiresIn: "1h"})
+    res.json({token});
+  }catch(err) {
+    res.sendStatus(401)
+  }
+}
+
+
 module.exports = { 
   getAll,
   getOne,
@@ -85,9 +102,6 @@ module.exports = {
   remove,
   update,
   getUserPosts,
-  getUserComments
-/*
-  authorize,
-  checkIfUserIsAuthorized
-*/
+  getUserComments,
+  login
 };

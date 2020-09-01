@@ -89,6 +89,7 @@ function updateUser(id, username, password, role) {
 function loginUser(user) {
   return new Promise(async (resolve, reject) => {
     db.findOne({username: user.username}, (err, doc) => {
+      if(!doc) return reject('User does not exist')
       if(err) {
         console.log(err);
         reject(err);
