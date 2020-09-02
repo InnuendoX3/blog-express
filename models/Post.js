@@ -79,11 +79,16 @@ function countPosts() {
   })
 }
 
+function clearDatabase() {
+  dbPosts.remove({}, {multi: true})
+}
+
 module.exports = { 
   findPosts,
   findPost,
   savePost,
   deletePost,
   updatePost,
-  countPosts
+  countPosts,
+  clearDatabase
 };

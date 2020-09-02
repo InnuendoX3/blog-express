@@ -52,7 +52,7 @@ function userFindUser(userId) {
 }
 
 function saveUser(user) {
-  return new Promise(async (resolve, reject) => {
+  return new Promise((resolve, reject) => {
     const salt = bcryptjs.genSaltSync(10);
     const hash = bcryptjs.hashSync(user.password, salt);
     let hashedUser = {
@@ -112,6 +112,18 @@ function loginUser(user) {
   })
 }
 
+function countUsers() {
+  return new Promise((resolve, reject) => {
+    dbUsers.count({}, (err, qtyUsers) => {
+      if(err) return reject(err)
+      resolve(qtyUsers)
+    })
+  })
+}
+
+function clearDatabase() {
+  dbUsers.remove({}, {multi: true})
+}
 
 module.exports = { 
   findUsers,
@@ -120,5 +132,7 @@ module.exports = {
   saveUser,
   deleteUser,
   updateUser,
-  loginUser
+  loginUser,
+  countUsers,
+  clearDatabase
 };

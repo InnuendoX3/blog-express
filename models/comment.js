@@ -1,4 +1,4 @@
-const dbComments = require('../database/createDB')
+const { dbComments } = require('../database/createDB')
 /**
  * {
  *    text:     String
@@ -68,10 +68,25 @@ function updateComment(id, text, postId, ownerId) {
   })
 }
 
+function countComments() {
+  return new Promise(async (resolve, reject) => {
+    dbComments.count({}, (err, qtyComments) => {
+      if(err) return reject(err)
+      resolve(qtyComments)
+    })
+  })
+}
+
+function clearDatabase() {
+  dbComments.remove({}, {multi: true})
+}
+
 module.exports = {
   findComments,
   findComment,
   saveComment,
   deleteComment,
-  updateComment
+  updateComment,
+  countComments,
+  clearDatabase
 }
