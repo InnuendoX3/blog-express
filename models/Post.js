@@ -1,7 +1,4 @@
-const Datastore = require('nedb');
-const db = new Datastore({ filename: './store-posts.db' });
-db.loadDatabase(function (err) {});
-
+const { dbPosts } = require('../database/createDB')
 /**
  * {
  *    title:    String
@@ -13,7 +10,7 @@ db.loadDatabase(function (err) {});
 
 function findPosts(filter) {
   return new Promise( async (resolve, reject) => {
-    db.find(filter, (err, docs) => {
+    dbPosts.find(filter, (err, docs) => {
       if(err) {
         console.log(err);
         reject(err);
@@ -25,7 +22,7 @@ function findPosts(filter) {
 
 function findPost(postId) {
   return new Promise( async (resolve, reject) => {
-    db.findOne({_id: postId}, (err, doc) => {
+    dbPosts.findOne({_id: postId}, (err, doc) => {
       if(err) {
         console.log(err);
         reject(err);
@@ -37,7 +34,7 @@ function findPost(postId) {
 
 function savePost(post) {
   return new Promise(async (resolve, reject) => {
-    db.insert(post, (err, newDoc) => {
+    dbPosts.insert(post, (err, newDoc) => {
       if(err) {
         console.log(err);
         reject(err);
@@ -50,7 +47,7 @@ function savePost(post) {
 
 function deletePost(id) {
   return new Promise(async (resolve, reject) => {
-    db.remove({ _id: id }, {}, (err, numRemoved) => {
+    dbPosts.remove({ _id: id }, {}, (err, numRemoved) => {
       if(err) {
         console.log(err);
         reject(err);
@@ -62,7 +59,7 @@ function deletePost(id) {
 
 function updatePost(id, title, content) {
   return new Promise(async (resolve, reject) => {
-    db.update({ _id : id }, { title, content }, {}, (err, numReplaced) => {
+    dbPosts.update({ _id : id }, { title, content }, {}, (err, numReplaced) => {
       if(err) {
         reject(err)
       }
@@ -71,10 +68,22 @@ function updatePost(id, title, content) {
   })
 }
 
+function countPosts() {
+  return new Promise(async (resolve, reject) => {
+    dbPosts.count({}, (err, numberPosts) => {
+      if(err) {
+        reject(err)
+      }
+      resolve(numberPosts)
+    })
+  })
+}
+
 module.exports = { 
   findPosts,
   findPost,
   savePost,
   deletePost,
-  updatePost
+  updatePost,
+  countPosts
 };

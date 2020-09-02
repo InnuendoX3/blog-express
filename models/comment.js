@@ -1,7 +1,4 @@
-const Datastore = require('nedb');
-const db = new Datastore({ filename: './store-comments.db'});
-db.loadDatabase(function (err) {});
-
+const dbComments = require('../database/createDB')
 /**
  * {
  *    text:     String
@@ -13,7 +10,7 @@ db.loadDatabase(function (err) {});
 
 function findComments(filter = {}) {
   return new Promise( async (resolve, reject) => {
-    db.find(filter, (err, docs) => {
+    dbComments.find(filter, (err, docs) => {
       if(err) {
         console.log(err);
         reject(err);
@@ -26,7 +23,7 @@ function findComments(filter = {}) {
 
 function findComment(commentId) {
   return new Promise( async (resolve, reject) => {
-    db.findOne({_id: commentId}, (err, doc) => {
+    dbComments.findOne({_id: commentId}, (err, doc) => {
       if(err) {
         console.log(err);
         reject(err);
@@ -38,7 +35,7 @@ function findComment(commentId) {
 
 function saveComment(comment) {
   return new Promise((resolve, reject) => {
-    db.insert(comment, (err, newDoc) => {
+    dbComments.insert(comment, (err, newDoc) => {
       if (err) {
         console.log(err);
         reject(err)
@@ -50,7 +47,7 @@ function saveComment(comment) {
 
 function deleteComment(id) {
   return new Promise(async (resolve, reject) => {
-    db.remove({ _id: id }, {}, (err, numRemoved) => {
+    dbComments.remove({ _id: id }, {}, (err, numRemoved) => {
       if(err) {
         console.log(err);
         reject(err);
@@ -62,7 +59,7 @@ function deleteComment(id) {
 
 function updateComment(id, text, postId, ownerId) {
   return new Promise(async (resolve, reject) => {
-    db.update({ _id : id }, {text, postId, ownerId}, {}, (err, numReplaced) => {
+    dbComments.update({ _id : id }, {text, postId, ownerId}, {}, (err, numReplaced) => {
       if(err) {
         reject(err)
       }

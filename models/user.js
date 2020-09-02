@@ -1,7 +1,5 @@
-const Datastore = require('nedb');
+const { dbUsers } = require('../database/createDB')
 const bcryptjs = require('bcryptjs');
-const db = new Datastore({ filename: './store-users.db'});
-db.loadDatabase(function (err) {});
 
 /**
  * {
@@ -14,7 +12,7 @@ db.loadDatabase(function (err) {});
 
 function findUsers() {
   return new Promise( async (resolve, reject) => {
-    db.find({}, (err, docs) => {
+    dbUsers.find({}, (err, docs) => {
       if(err) {
         console.log(err);
         reject(err);
@@ -26,7 +24,7 @@ function findUsers() {
 
 function adminFindUser(userId) {
   return new Promise( async (resolve, reject) => {
-    db.findOne({_id: userId}, (err, doc) => {
+    dbUsers.findOne({_id: userId}, (err, doc) => {
       if(err) {
         console.log(err);
         reject(err);
@@ -38,7 +36,7 @@ function adminFindUser(userId) {
 
 function userFindUser(userId) {
   return new Promise( async (resolve, reject) => {
-    db.findOne({_id: userId}, (err, doc) => {
+    dbUsers.findOne({_id: userId}, (err, doc) => {
       if(err) {
         console.log(err);
         reject(err);
@@ -62,7 +60,7 @@ function saveUser(user) {
       password: hash,
       role: user.role
     };
-    db.insert(hashedUser, (err, newDoc) => {
+    dbUsers.insert(hashedUser, (err, newDoc) => {
       if(err) {
         console.log(err);
         reject(err);
@@ -74,7 +72,7 @@ function saveUser(user) {
 
 function deleteUser(id) {
   return new Promise(async (resolve, reject) => {
-    db.remove({ _id: id }, {}, (err, numRemoved) => {
+    dbUsers.remove({ _id: id }, {}, (err, numRemoved) => {
       if(err) {
         console.log(err);
         reject(err);
@@ -86,7 +84,7 @@ function deleteUser(id) {
 
 function updateUser(id, username, password, role) {
   return new Promise(async (resolve, reject) => {
-    db.update({ _id : id }, { username, password, role }, {}, (err, numReplaced) => {
+    dbUsers.update({ _id : id }, { username, password, role }, {}, (err, numReplaced) => {
       if(err) {
         reject(err)
       }
@@ -97,7 +95,7 @@ function updateUser(id, username, password, role) {
 
 function loginUser(user) {
   return new Promise(async (resolve, reject) => {
-    db.findOne({username: user.username}, (err, doc) => {
+    dbUsers.findOne({username: user.username}, (err, doc) => {
       if(!doc) return reject('User does not exist')
       if(err) {
         console.log(err);

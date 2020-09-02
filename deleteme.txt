@@ -1,0 +1,9 @@
+/** TODO **/
+
+-OK- getAllPosts: Admin get all / User just his own
+-OK- createPost: ownerID autosaved from Token info  
+
+getPost: make authorization for Admin /user
+deletePost: make authorization for Admin /user
+updatePost: make authorization for Admin /user
+UNITTEST!
