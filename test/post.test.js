@@ -23,12 +23,13 @@ describe('Test for Post model', () => {
     const user = await userModel.saveUser({ username: 'Juan', password: '12345', role: 'user' })
     const post = await postModel.savePost({ title: 'This test', content: 'Test test test test', ownerId: user._id })
 
-    const owner = await postOwner(post._id)
+    const owner = await postModel.postOwner(post._id)
+    
     expect(owner).to.be.a('object')
     expect(owner).to.have.all.keys(['username', 'password', 'role', '_id'])
     expect(owner.username).to.equal('Juan')
     expect(owner.role).to.equal('user')
-    expect(owner._id).to.equal(post.userOwner)
+    expect(owner._id).to.equal(post.ownerId)
 
   })
 

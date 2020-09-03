@@ -1,5 +1,5 @@
 const { dbPosts } = require('../database/createDB')
-// const userModel =
+const userModel = require('../models/user')
 /**
  * {
  *    title:    String
@@ -82,8 +82,14 @@ function countPosts() {
 
 //TODO
 function postOwner(postId) {
-  return new Promise(async (resolve, reject) => {
-    db
+  return new Promise( async (resolve, reject) => {
+    try {
+      const post = await findPost(postId)
+      const user = await userModel.findUser(post.ownerId)
+      resolve(user)
+    } catch (error) {
+      reject(error)
+    }
   })
 }
 
@@ -98,5 +104,6 @@ module.exports = {
   deletePost,
   updatePost,
   countPosts,
+  postOwner,
   clearDatabase
 };
