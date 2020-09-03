@@ -50,8 +50,6 @@ async function remove(req, res) {
   const userId = req.user.userId;
   const userRole = req.user.role;
 
-  console.log(userRole, userIdToRemove, userId)
-
   if(userRole !== 'Admin' && userIdToRemove !== userId) return res.sendStatus(401)
 
   const numDeleted = await deleteUser(userIdToRemove);
@@ -60,14 +58,25 @@ async function remove(req, res) {
 }
 
 // Update a user using its Id
+// Admin can update users
+// User just his own user
 async function update(req, res) {
-  const userId = req.params.userId;
+  const userIdToUpdate = req.params.userId;
+
+  // Info to update (Body)
   const username = req.body.username;
   const password = req.body.password;
   const role = req.body.role;
-  const numUpdated = await updateUser(userId, username, password, role);
+
+  // User info (from token)
+  const userId = req.user.userId;
+  const userRole = req.user.role
+
+  if(userRole !== 'Admin' && userIdToUpdate !== userId) return res.sendStatus(401)
+
+  const numUpdated = await updateUser(userIdToUpdate, username, password, role);
   const message = `${numUpdated} document(s) updated`;
-  res.status(200).send(message);
+  res.status(200).send({message});
 }
 
 // Relationships

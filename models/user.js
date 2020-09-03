@@ -68,7 +68,9 @@ function deleteUser(id) {
 
 function updateUser(id, username, password, role) {
   return new Promise(async (resolve, reject) => {
-    dbUsers.update({ _id : id }, { username, password, role }, {}, (err, numReplaced) => {
+    const salt = bcryptjs.genSaltSync(10);
+    const hash = bcryptjs.hashSync(password, salt);
+    dbUsers.update({ _id : id }, { username, password: hash, role }, {}, (err, numReplaced) => {
       if(err) {
         reject(err)
       }
