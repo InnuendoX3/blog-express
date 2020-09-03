@@ -46,9 +46,9 @@ function savePost(post) {
     
 }
 
-function deletePost(id) {
+function deletePost(queryFilter) {
   return new Promise(async (resolve, reject) => {
-    dbPosts.remove({ _id: id }, {}, (err, numRemoved) => {
+    dbPosts.remove(queryFilter, {}, (err, numRemoved) => {
       if(err) {
         console.log(err);
         reject(err);
@@ -58,9 +58,9 @@ function deletePost(id) {
   })
 }
 
-function updatePost(id, title, content) {
+function updatePost(queryFilter, title, content) {
   return new Promise(async (resolve, reject) => {
-    dbPosts.update({ _id : id }, { title, content }, {}, (err, numReplaced) => {
+    dbPosts.update(queryFilter, { $set: {title, content} }, {}, (err, numReplaced) => {
       if(err) {
         reject(err)
       }

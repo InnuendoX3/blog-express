@@ -9,9 +9,9 @@ const secret = "random string";
 async function getAll(req, res) {
   if (req.user.role === "Admin") {
     const users = await findUsers();
-    res.send(users).status(200); 
+    res.status(200).send(users); 
   } else {
-    res.send("Only admins can do that, sunny")
+    res.sendStatus(401)
   }
 }
 

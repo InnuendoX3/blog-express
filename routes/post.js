@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const postController = require('../controllers/post');
-const { authorizeAdmin, authorizeUser } = require('../middlewares/authorization');
+const { authorizeUser } = require('../middlewares/authorization');
 
 //Admin and user routes
 router.get('/', authorizeUser, postController.getAll);

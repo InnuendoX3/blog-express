@@ -1,7 +1,10 @@
 const { findPosts, findPost, savePost, deletePost, updatePost } = require('../models/post');
 const { findComments } = require('../models/comment');
+const post = require('../models/post');
 
 // Get all posts
+// Admin get all posts
+// User just his own posts
 async function getAll(req, res) {
   let queryFilter = {}  // Admin {}
   if(req.user.role === 'User') {
@@ -12,17 +15,29 @@ async function getAll(req, res) {
 }
 
 // Get a post
+// Admin get a post from everybody
+// User just his own post
 async function getOne(req, res) {
   const postId = req.params.postId;
+  const userId = req.user.userId;
+  const userRole = req.user.role;
+
   const post = await findPost(postId);
-  if (post === null) {
-    res.send({message: 'Post not found'}).status(400);
+
+  if(post === null) {
+    return res.status(400).send({message: 'Post not found'})
+  };
+
+  if(userRole !== 'Admin' && post.ownerId !== userId) {
+    res.sendStatus(401)
   } else {
-    res.send(post).status(200);
+    res.status(200).send(post);
   }
 }
 
 // Create new post
+// No authorization needed.
+// OwnerId is entered from payloads token
 async function create(req, res) {
   const post = {
     title: req.body.title,
@@ -34,9 +49,27 @@ async function create(req, res) {
 } 
 
 // Remove post by Id
+// Admin can remove comments from anybody
+// User just his own
 async function remove(req, res) {
   const postId = req.params.postId;
-  const numDeleted = await deletePost(postId);
+  const userId = req.user.userId;
+  const role = req.user.role;
+  let queryFilter = {}
+
+  if(role === 'Admin') {
+    queryFilter = { _id: postId }
+  }
+
+  if(role === 'User') {
+    queryFilter = {
+      _id: postId,
+      ownerId: userId
+    }
+  }
+
+  const numDeleted = await deletePost(queryFilter);
+  if(numDeleted === 0) return res.status(400).send({message: 'Bad request or unauthorized'})
   const message = `${numDeleted} document(s) deleted`;
   res.send({message}).status(200);
 }
@@ -44,11 +77,33 @@ async function remove(req, res) {
 // Update a post using its Id
 async function update(req, res) {
   const postId = req.params.postId;
+  let queryFilter = {}
+
+  // New post info
   const title = req.body.title;
   const content = req.body.content;
-  const numUpdated = await updatePost(postId, title, content);
+
+  // User info
+  const userId = req.user.userId;
+  const role = req.user.role;
+
+  if(role === 'Admin') {
+    queryFilter = {
+      _id: postId
+    }
+  }
+
+  if(role === 'User') {
+    queryFilter = {
+      _id: postId,
+      ownerId: userId
+    }
+  }
+
+  const numUpdated = await updatePost(queryFilter, title, content);
+  if(numUpdated === 0) return res.status(400).send({message: 'Bad request or unauthorized'})
   const message = `${numUpdated} document(s) updated`;
-  res.send(message).status(200);
+  res.send({message}).status(200);
 }
 
 // Relationships
