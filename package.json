@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "SET ENVIRONMENT=test&&mocha"
+    "test": "SET ENVIRONMENT=test&&mocha",
+    "start": "node index"
   },
   "author": "",
   "license": "ISC",

@@ -1,4 +1,5 @@
 const { dbPosts } = require('../database/createDB')
+// const userModel =
 /**
  * {
  *    title:    String
@@ -76,6 +77,13 @@ function countPosts() {
       }
       resolve(numberPosts)
     })
+  })
+}
+
+//TODO
+function postOwner(postId) {
+  return new Promise(async (resolve, reject) => {
+    db
   })
 }
 

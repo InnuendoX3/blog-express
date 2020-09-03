@@ -1,10 +1,11 @@
-const { findUsers, adminFindUser, userFindUser, saveUser, deleteUser, updateUser, loginUser } = require('../models/user');
+const { findUsers, findUser, saveUser, deleteUser, updateUser, loginUser } = require('../models/user');
 const { findComments } = require('../models/comment');
 const { findPosts } = require('../models/post');
 const jwt = require('jsonwebtoken');
 const secret = "random string";
 
-// Get all users
+// Get all users. 
+// Just Admin by authorizationAdmin
 async function getAll(req, res) {
   if (req.user.role === "Admin") {
     const users = await findUsers();
@@ -15,42 +16,47 @@ async function getAll(req, res) {
 }
 
 // Get a user
+// Admin can get one user
+// User can get his own user 
 async function getOne(req, res) {
-  const userId = req.params.userId;
-  if (req.user.role == "Admin") {
-    const user = await adminFindUser(userId);
+  const userIdToFind = req.params.userId;
+  const userId = req.user.userId;
+  const userRole = req.user.role;
 
-    if (user === null) {
-      res.send({message: 'User not found'}).status(400);
-    } else {
-      res.send(user).status(200);
-    }
+  if(userRole !== 'Admin' && userIdToFind !== userId) return res.sendStatus(401)
 
-  } else if(req.user.role == "User") {
-    const user = await userFindUser(userId)
+  const user = await findUser(userIdToFind)
+  
+  if (user === null) {
+    res.status(400).send({message: 'User not found'});
+  } else {
+    res.status(200).send(user);
   }
 }
 
 // Create new user
+// Anyone can create user
 async function create(req, res) {
   const user = req.body;
   const info = await saveUser(user);
-  res.send(info).status(201);
+  res.status(201).send(info);
 } 
 
 // Remove user by Id
+// Admin can remove users
+// User just his own user
 async function remove(req, res) {
-  /*
-  if(req.user.role === "Admin") {
+  const userIdToRemove = req.params.userId;
+  const userId = req.user.userId;
+  const userRole = req.user.role;
 
-  } else {
+  console.log(userRole, userIdToRemove, userId)
 
-  }
-  */
-  const userId = req.params.userId;
-  const numDeleted = await deleteUser(userId);
+  if(userRole !== 'Admin' && userIdToRemove !== userId) return res.sendStatus(401)
+
+  const numDeleted = await deleteUser(userIdToRemove);
   const message = `${numDeleted} document(s) deleted`;
-  res.send({message}).status(200);
+  res.status(200).send({message});
 }
 
 // Update a user using its Id
@@ -61,7 +67,7 @@ async function update(req, res) {
   const role = req.body.role;
   const numUpdated = await updateUser(userId, username, password, role);
   const message = `${numUpdated} document(s) updated`;
-  res.send(message).status(200);
+  res.status(200).send(message);
 }
 
 // Relationships

@@ -22,7 +22,7 @@ function findUsers() {
   })
 }
 
-function adminFindUser(userId) {
+function findUser(userId) {
   return new Promise( async (resolve, reject) => {
     dbUsers.findOne({_id: userId}, (err, doc) => {
       if(err) {
@@ -34,22 +34,6 @@ function adminFindUser(userId) {
   })
 }
 
-function userFindUser(userId) {
-  return new Promise( async (resolve, reject) => {
-    dbUsers.findOne({_id: userId}, (err, doc) => {
-      if(err) {
-        console.log(err);
-        reject(err);
-      } else {
-        if(doc._id == userId) {
-          resolve(doc)
-        } else {
-          reject("You can only view your own profile")
-        }
-      }
-    })
-  })
-}
 
 function saveUser(user) {
   return new Promise((resolve, reject) => {
@@ -121,14 +105,14 @@ function countUsers() {
   })
 }
 
+
 function clearDatabase() {
   dbUsers.remove({}, {multi: true})
 }
 
 module.exports = { 
   findUsers,
-  adminFindUser,
-  userFindUser,
+  findUser,
   saveUser,
   deleteUser,
   updateUser,
